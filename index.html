@@ -1,0 +1,477 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head><title>
+	华域酒店顾问（CHC）
+</title><meta name="Keywords" content="华域酒店顾问,酒店咨询，酒店投资顾问，酒店开发，酒店策划，酒店筹建，酒店管理" /><meta name="Description" content="华域酒店顾问（CHC） 拥有一支国内外酒店业资深执业背景的专家顾问团队。具有市场分析、投资策划、方案咨询、酒店管理的完整技术能力。坚持以整体项目价值的角度提供顾问咨询方案，力求最佳的可实施性和经济性。坚持为客户提供最具创意和竞争力的顾问产品。" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=7" />
+<link href="css/index.css" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" href="css/anythingslider.css" type="text/css" media="screen" />
+<link rel="stylesheet" type="text/css" href="css/wbox.css" /></head>
+<body>
+    
+
+<script type="text/javascript">
+    $(function () {
+        document.onkeydown = function (e) {
+            var theEvent = window.event || e;
+            var code = theEvent.keyCode || theEvent.which;
+            if (code == 13) {
+                $("#searchbutton").click();
+            }
+        };
+        $("#searchbutton").click(function () {
+            var keywords = $("#searchinput").val();
+            if (keywords == "" || keywords == "Search...") {
+                alert("请输入搜索关键字");
+                return false;
+            }
+            window.location.href = "search.aspx?keywords=" + keywords;
+        });
+    });
+    //    function searchClick() {
+    //        var keywords = document.getElement("searchinput").value;
+    //        if (keywords == "" || keywords == "Search...") {
+    //            alert("请输入搜索关键字");
+    //            return false;
+    //        }
+    //        window.location.href = "search.aspx?keywords=" + keywords;
+    //    }
+
+    //    document.onkeydown = function (e) {
+    //        var theEvent = window.event || e;
+    //        var code = theEvent.keyCode || theEvent.which;
+    //        if (code == 13) {
+    //            document.getElement("searchbutton").click();
+    //        }
+    //    };
+</script>
+
+<script type="text/javascript" src="jquery-1.8.3.min.js"></script>
+       <script type="text/javascript">
+            $(document).ready(
+                function(){
+                    //在程序运行的时候，只让第1个li显示，其余隐藏。
+                    $("#lunbo #tupian ul li").eq(0).show().siblings().hide();
+                    //将有多少张图片存入变量
+                    var picamount = $("#lunbo #tupian ul li").length;   
+                    //利用循环语句，添加小圆点。让小圆点的个数，和图片个数一样多。
+                    for(var i = 0 ; i < picamount ; i++){
+                        $("#lunbo #xiaoyuandian ul").append("<li>"  +"</li>");
+                    }
+                    //设置信号量，表示当前显示图片的id
+                    var nowshowpic = 0 ; 
+                    //这是设置自动滚动的时间间隔的 ↓ 
+                    var jiangeshijian =2000;
+                    //调用设置小圆点函数，使初始状态，第一个小圆点是蓝色
+                    shezhixiaoyuandian(0);
+                    shezhilianjie(0);
+
+                    //让页面每2000毫秒自动轮播
+                    var mytimer = window.setInterval(
+                        function(){
+                            $("#lunbo #anniu .you").trigger("click");
+                        },jiangeshijian);
+
+                    //给右边按钮添加事件监听
+                    $("#lunbo #anniu .you").click(
+                        function(){
+                            if(!$("#zhezhao").is(":animated")){
+                                //折腾信号量，如果不是最后一张，就加1。否则变成0
+                                //不用改 ↓ 
+                                if(nowshowpic != picamount - 1){
+                                    nowshowpic ++ ;
+                                }else{
+                                    nowshowpic = 0;
+                                }
+                                huantu(nowshowpic);
+                                shezhixiaoyuandian(nowshowpic);
+                                shezhilianjie(nowshowpic);
+                            }
+                        }
+                    );
+
+                    //给左边按钮添加事件监听
+                    $("#lunbo #anniu .zuo").click(
+                        function(){
+                            if(!$("#zhezhao").is(":animated")){
+                                //折腾信号量，如果不是最后一张，就加1。否则变成0
+                                //不用改 ↓ 
+                                if(nowshowpic != 0){
+                                    nowshowpic -- ;
+                                }else{
+                                    nowshowpic = picamount - 1;
+                                }
+                                huantu(nowshowpic);
+                                shezhixiaoyuandian(nowshowpic);
+                                shezhilianjie(nowshowpic);
+                            }
+                        }
+                    );
+
+                    $("#lunbo #xiaoyuandian ul li").click(
+                        function(){
+                            if(!$("#zhezhao").is(":animated")){
+                                //让信号量的值变为自己的值
+                                    nowshowpic = $(this).index();
+                                //调用换图函数
+                                    huantu(nowshowpic);
+                                //调用设置小圆点函数
+                                    shezhixiaoyuandian(nowshowpic);
+                                //调用设置连接函数
+                                    shezhilianjie(nowshowpic);
+                            }
+                        }
+                    );
+
+                    //当鼠标进入遮罩层的时候，停止自动滚动
+                    $("#zhezhao,#xiaoyuandian,#anniu").mouseover(
+                        function(){
+                            window.clearInterval(mytimer);
+                            console.log("表已经停止")
+                        }
+                    );
+
+                    //当鼠标离开遮罩层的时候，开始自动滚动
+                    $("#zhezhao,#xiaoyuandian,#anniu").mouseout(
+                        function(){
+                            window.clearInterval(mytimer);  //设表先关原则
+                            mytimer = window.setInterval(
+                                function(){
+                                $("#lunbo #anniu .you").trigger("click");
+                                },jiangeshijian);
+                            console.log("表已经开始")
+                        }
+                    );
+
+                    //这是设置小圆点函数，功能就是根据指定的num，来让第num个小圆点变蓝。其余变白。
+                    function shezhixiaoyuandian(num){
+                        //只让第num个li有cur，其余没有cur
+                        $("#lunbo #xiaoyuandian ul li").eq(num).addClass("cur").siblings().removeClass("cur");
+                    }
+                    
+                    //这是设置连接的函数，功能是让遮罩上的猫腻a标签的href，等于当前图片a的href
+                    function shezhilianjie(num){
+                        // 不用改 ↓
+                        $("#lunbo #zhezhao a").attr("href",$("#tupian ul li").eq(num).children("a").attr("href"));
+                    }
+                    
+                    //这是换图函数，功能就是根据指定的num，来呼吸切换图片
+                    function huantu(num){
+                        $("#lunbo #zhezhao").animate(
+                            {
+                                "opacity":1
+                            },600,
+                            function(){
+                                $("#lunbo #tupian ul li").eq(num).show().siblings().hide();
+                            }
+                        ).animate(
+                            {
+                                "opacity":0
+                            },600
+                        );
+                    }
+                }
+            );
+        </script>
+
+<div id="top">
+    <div class="header">
+        <div class="head_ban">
+            <div class="contact">
+                <a href="contact.aspx?tid=13">Contact us</a><img src="images/ban_line.jpg" width="2"
+                    height="9" /><a href="contact.aspx?tid=14">Sitemap</a></div>
+            <div class="search">
+                <div class="searchbuttondiv">
+                    <input id="searchbutton" name="searchbutton" class="searchbutton" type="button" onclick="return searchClick()" /></div>
+                <div class="searchinputdiv">
+                    <input id="searchinput" name="searchinput" class="searchinput" type="text" value="Search..."
+                        onfocus="if(value=='Search...') {value=''}" onblur="if (value=='') {value='Search...'}" />
+                </div>
+            </div>
+            <div class="clearfix">
+            </div>
+        </div>
+        <div class="head">
+            <div class="logo">
+                <a href="index.aspx">
+                    <img src="images/logo.png" width="137" height="47" alt="华域顾问" /></a></div>
+            <div class="nav">
+                <ul>
+                    <li class="about_nav"><a href="about-list.aspx">关于华域</a></li>
+                    <li class="services_nav"><a href="service-list.aspx">核心服务</a></li>
+                    <li class="case_nav"><a href="case-list.aspx">客户案例</a></li>
+                    <li class="new_nav"><a href="news-list.aspx">华域视点</a></li>
+                    <li class="contact_nav"><a href="contact.aspx">联系华域</a></li>
+                    <li class="clearfix"></li>
+                </ul>
+            </div>
+            <div class="clearfix">
+            </div>
+        </div>
+    </div>
+</div>
+
+    <div id="banner">
+        <!-- BEGIN AnythingSlider Content -->
+        <div id="anythingslidercontainer">
+            <div id="anythingslidersubcontainer">
+                <div id="anythingslidersub"><!--开始放置轮播-->
+                  
+                    <div id="lunbo">
+            <div id="tupian" class="tupian">
+                <ul>                   
+                    <li><a href="#"><img src="images/banner2-1.jpg" /></a></li>
+                    <li><a href="#"><img src="images/banner3-1.jpg" /></a></li>
+                    <li><a href="#"><img src="images/banner4-1.jpg" /></a></li>
+                </ul>
+            </div>
+            <div id="anniu" class="anniu">
+                <a class="zuo"></a>
+                <a class="you"></a>
+            </div>
+           
+            <div id="xiaoyuandian" class="xiaoyuandian">
+                <ul></ul>
+            </div>
+            <div id="zhezhao"></div>
+
+
+
+<!--结束放置轮播-->
+
+                </div>
+            </div>
+        </div>
+        <!-- Anything Slider JavaScript -->
+        <script type="text/javascript">
+            jQuery(function () {
+                jQuery('#slider1').anythingSlider({
+                    startStopped: false, // If autoPlay is on, this can force it to start stopped
+                    hashTags: false,
+                    autoPlay: true,
+                    buildNavigation: true,
+                    toggleArrows: false,
+                    buildArrows: false,
+                    enablePlay: false,      // if false, the play/stop button will still be visible, but not clickable.
+                    autoPlayLocked: false,  // If true, user changing slides will not stop the slideshow
+                    resumeDelay: 10000, // Resume slideshow after user interaction, only if autoplayLocked is true (in milliseconds).
+                    easing: "swing",   // Anything other than "linear" or "swing" requires the easing plugin
+                    delay: 4500,      // How long between slideshow transitions in AutoPlay mode (in milliseconds)
+                    animationTime: 600,       // How long the slideshow transition takes (in milliseconds)
+                    onSlideComplete: function (slider) {
+                        // alert('Welcome to Slide #' + slider.currentPage);
+                    }
+                });
+
+            });
+        </script>
+        <!-- END AnythingSlider -->
+    </div>
+    <div id="content">
+        <div class="company">
+            <div class="company_img">
+                <a href="about-list.aspx">
+                    <img src="images/index_chc.jpg" width="105" height="102" alt="CHC" /></a></div>
+            <div class="company_txt">
+                <h1 class="h1">
+                    <a href="about-list.aspx">关于华域</a></h1>
+                <div class="content">
+                    <a href="about-list.aspx">
+                        <p>
+	华域酒店顾问（CHC） 中国高星级酒店项目开发筹建领域的品牌服务机构。专注于为高星级酒店提供投资评估、开发策略设计、设计及工程技术支持、管理咨询等多维度的顾问服务。</p>
+<p>
+	&nbsp;</p>
+<p>
+	<strong>8年历程&nbsp; 持续积累&nbsp; 融合共赢&nbsp;&nbsp;与客户一起共同创造新酒店！</strong></p>
+<p>
+	&nbsp;</p></a>
+                </div>
+                <div class="more">
+                    <a href="about-list.aspx">MORE</a>></div>
+            </div>
+            <div class="clearfix">
+            </div>
+        </div>
+        <div class="case">
+            <div class="case_img">
+                <a href="casev.aspx?tid=2">
+                    <img src="images/index_case.jpg" width="151" height="75" alt="客户案例" /></a></div>
+            <div class="case_txt">
+                <h1 class="h1">
+                    <a href="casev.aspx?tid=2">客户案例</a></h1>
+                <div class="conent">
+                    <ul>
+                        <a href="casev.aspx?tid=2">
+                            <li><span class="bold">甘肃公路航空旅游集</span>/黄河明珠大酒店</li><li><span class="bold">新余超力房地产</span>/钟山国际酒店项目</li><li><span class="bold">郑州恒通地产</span>/郑州恒通酒店项目</li><li><span class="bold">郑州海龙实业集团</span>/郑州海龙大酒店</li><li><span class="bold">深圳中恒信达投资集</span>/营口城市商务酒店项</li><li><span class="bold">河南亚飞汽车销售有</span>/洛阳亚飞汉宫酒店项</li><li><span class="bold">成都协信置业</span>/协信广场酒店项目</li><li><span class="bold">湘西地产</span>/湘西边城大酒店项目</li></a>
+                    </ul>
+                    <div class="more">
+                        <a href="casev.aspx?tid=2">MORE</a>></div>
+                </div>
+                <div class="clearfix">
+                </div>
+            </div>
+            <div class="clearfix">
+            </div>
+        </div>
+    </div>
+    <div id="brand">
+        <div class="brand_content">
+            <div class="brand_txt">
+                <img src="images/brand_txt.png" width="395" height="18" alt="" /></div>
+            <div class="brand_img">
+                <img src="images/brand_img.jpg" width="400" height="46" alt="" /></div>
+            <div class="clearfix">
+            </div>
+        </div>
+    </div>
+    
+<div id="bottom">
+    <div id="footer">
+        <div class="foot">
+            <div class="footer_link">
+                
+                        <dl>
+                            <dt><a href="service.aspx?tid=5">
+                                酒店投资顾问</a></dt>
+                            
+                                    <dd>
+                                        <a href="service.aspx?id=1">
+                                            市场及财务可行性研究
+                                        </a>
+                                    </dd>
+                                
+                                    <dd>
+                                        <a href="service.aspx?id=2">
+                                            酒店业专项市场研究
+                                        </a>
+                                    </dd>
+                                
+                                    <dd>
+                                        <a href="service.aspx?id=3">
+                                            竞争对手调研
+                                        </a>
+                                    </dd>
+                                
+                                    <dd>
+                                        <a href="service.aspx?id=4">
+                                            酒店项目招商中介
+                                        </a>
+                                    </dd>
+                                
+                        </dl>
+                    
+                        <dl>
+                            <dt><a href="service.aspx?tid=6">
+                                综合开发策略咨询</a></dt>
+                            
+                                    <dd>
+                                        <a href="service.aspx?id=43">
+                                            城市新区五星级酒店开发策略咨询
+                                        </a>
+                                    </dd>
+                                
+                                    <dd>
+                                        <a href="service.aspx?id=44">
+                                            城市综合体酒店项目开发策略咨询
+                                        </a>
+                                    </dd>
+                                
+                                    <dd>
+                                        <a href="service.aspx?id=39">
+                                            精品酒店策划
+                                        </a>
+                                    </dd>
+                                
+                                    <dd>
+                                        <a href="service.aspx?id=45">
+                                            精品酒店开发策略咨询
+                                        </a>
+                                    </dd>
+                                
+                        </dl>
+                    
+                        <dl>
+                            <dt><a href="service.aspx?tid=7">
+                                技术支持服务</a></dt>
+                            
+                                    <dd>
+                                        <a href="service.aspx?id=51">
+                                            业主综合技术服务支持
+                                        </a>
+                                    </dd>
+                                
+                                    <dd>
+                                        <a href="service.aspx?id=50">
+                                            酒店开发专题培训
+                                        </a>
+                                    </dd>
+                                
+                                    <dd>
+                                        <a href="service.aspx?id=49">
+                                            建设期工程技术服务
+                                        </a>
+                                    </dd>
+                                
+                                    <dd>
+                                        <a href="service.aspx?id=7">
+                                            酒店设计顾问
+                                        </a>
+                                    </dd>
+                                
+                        </dl>
+                    
+                        <dl>
+                            <dt><a href="service.aspx?tid=8">
+                                酒店管理顾问</a></dt>
+                            
+                                    <dd>
+                                        <a href="service.aspx?id=48">
+                                            酒店开业筹备顾问
+                                        </a>
+                                    </dd>
+                                
+                                    <dd>
+                                        <a href="service.aspx?id=47">
+                                            酒店管理评估
+                                        </a>
+                                    </dd>
+                                
+                                    <dd>
+                                        <a href="service.aspx?id=8">
+                                            管理品牌采购顾问
+                                        </a>
+                                    </dd>
+                                
+                        </dl>
+                    
+                <div class="clearfix">
+                </div>
+            </div>
+            <div class="footer_right">
+                <div class="gzhy">
+                    关注华域</div>
+                <div class="share">
+                    <a href="#">
+                        <img src="images/qq_wb.jpg" width="35" height="35" alt="华域qq微博" /></a> <a href="http://e.weibo.com/chchotels">
+                            <img src="images/sina_wb.jpg" width="35" height="35" alt="华域新浪微博" /></a>
+                    <a href="Rss.aspx">
+                        <img src="images/rss.jpg" width="35" height="35" alt="订阅" /></a><div class="clearfix">
+                        </div>
+                </div>
+                <div>
+                    © 2012 Hotels Consultant</div>
+            </div>
+            <div class="clearfix">
+            </div>
+        </div>
+        <div class="copright">
+            版权所有 &copy; 2005-2012
+            深圳市华域酒店管理顾问有限公司</div>
+    </div>
+</div>
+
+</body>
+</html>
